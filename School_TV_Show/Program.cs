@@ -230,6 +230,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 //app.UseCors("AllowAllOrigins"); // Apply CORS policy
+
 app.UseCors("AllowDynamicOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
