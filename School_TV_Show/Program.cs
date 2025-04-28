@@ -172,13 +172,13 @@ builder.Services.Configure<CloudflareSettings>(builder.Configuration.GetSection(
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowDynamicOrigins", policy =>
     {
         policy
-            .SetIsOriginAllowed(_ => true) // ✅ Cho tất cả origin
+            .SetIsOriginAllowed(origin => !string.IsNullOrEmpty(origin)) // ⚡ Cho tất cả domain nào gửi origin hợp lệ
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .AllowCredentials();           // ✅ Cho phép credentials
+            .AllowCredentials();
     });
 });
 
@@ -230,7 +230,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 //app.UseCors("AllowAllOrigins"); // Apply CORS policy
-app.UseCors("AllowAll");
+app.UseCors("AllowDynamicOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapHub<LiveStreamHub>("/hubs/livestream");
